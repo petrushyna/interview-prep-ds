@@ -15,5 +15,3 @@ def strToList(list_l, splitSymbol):
         l = l.replace("[",'').replace("]",'').replace("'", '').replace(" ", '')
         temp.append(l)
     return temp
-
-print(strToList('[4,5,6]', ','))
