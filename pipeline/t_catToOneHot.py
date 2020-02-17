@@ -26,9 +26,10 @@ class MyLabelBinarizer(BaseEstimator, TransformerMixin):
     def fit(self,X): 
         return self
     def transform(self, X): 
+        columns = X.columns
         if(self.columns !=[]):
             X = X[self.columns]
         X = ut.deleteNullValues(X)
         lb_bin = LabelBinarizer()
-        main_cat_encoder_results = lb_bin.fit_transform(X)
-        return pd.DataFrame(main_cat_encoder_results, columns = self.columns)
+        main_cat_encoder_results = lb_bin.fit_transform(list(X.values.flatten()))
+        return pd.DataFrame(main_cat_encoder_results, columns = self.columns, index = X.index)

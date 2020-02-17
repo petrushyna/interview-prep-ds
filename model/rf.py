@@ -2,9 +2,9 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score
 import metrics
+import numpy as np
 
 def getBestModel(train_df, test_df, train_labels, test_labels, model):
-
     param_grid = {}
     param_grid = { "max_depth": [3, 6]}
     #"max_features": sp_randint(1000, 2000)}
@@ -27,7 +27,10 @@ def getBestModel(train_df, test_df, train_labels, test_labels, model):
 def predict_rf(model, X_test,  y_test):
     y_pred = model.predict(X_test)
     print(metrics.accuracy_true_pred(y_pred, y_test))
-    #metrics.precision_recall(y_pred,y_test)
+    if(len(np.unique(y_test)) == 2):
+        metrics.precision_recall_binary(y_pred,y_test)
+    else:
+        metrics.precision_recall_multiclass(y_pred,y_test)
     return y_pred
 
 def run_rf(X_train, X_test, y_train, y_test,
@@ -42,5 +45,5 @@ def run_rf(X_train, X_test, y_train, y_test,
     rf_clf = getBestModel(X_train, X_test, y_train, y_test, rf_clf)
     
     y_pred = predict_rf(rf_clf, X_test, y_test)
-    return y_pred
+    return [y_pred, rf_clf]
 

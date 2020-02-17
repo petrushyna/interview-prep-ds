@@ -69,9 +69,7 @@ def transform_catLabelBinarizer(df, columns = []):
     
     cat_encoder = df[columns]
 
-    pip = Pipeline([(
-        "encodeCategoryWithLabelBinarizer", t_catToOneHot.labelBinarizer()
-    )])
+    pip = Pipeline([("encodeCategoryWithLabelBinarizer", t_catToOneHot.MyLabelBinarizer())])
     return pip.transform(cat_encoder)
 
 
