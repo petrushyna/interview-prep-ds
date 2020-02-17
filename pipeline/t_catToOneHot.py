@@ -14,8 +14,9 @@ class catToOneHot(BaseEstimator, TransformerMixin):
         
         columns=X.columns
         if(self.columns != []):
-            columns = self.columns
-        
+            X = X[self.columns]
+            columns = X.columns
+            
         X_onehot = pd.get_dummies(X, columns=columns)
         return X_onehot
 
@@ -25,7 +26,9 @@ class MyLabelBinarizer(BaseEstimator, TransformerMixin):
     def fit(self,X): 
         return self
     def transform(self, X): 
+        if(self.columns !=[]):
+            X = X[self.columns]
         X = ut.deleteNullValues(X)
         lb_bin = LabelBinarizer()
         main_cat_encoder_results = lb_bin.fit_transform(X)
-        return pd.DataFrame(main_cat_encoder_results, columns=lb_bin.classes_)
+        return pd.DataFrame(main_cat_encoder_results, columns = self.columns)
