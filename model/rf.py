@@ -1,7 +1,7 @@
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score
-import metrics
+from model import metrics
 import numpy as np
 
 def getBestModel(train_df, test_df, train_labels, test_labels, model):

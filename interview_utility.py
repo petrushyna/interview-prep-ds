@@ -42,3 +42,13 @@ class ColStrColumns(BaseEstimator, TransformerMixin):
             output = output.append(a.loc[:,:self.columnsToAdd])
             print(row)
         return output
+
+def dfWithZeroNullOnly(df):
+    count = 0
+    for col in df.columns:
+        count += len(df[df[col]>1].index)
+        df = df.drop(df[df[col]>1].index)
+
+    print(str(count) + " values are deleted")
+    return df
+

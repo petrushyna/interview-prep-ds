@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import metrics
+from model import metrics
 import numpy as np
 
 def plot_learning_curves(model, X_train, X_test, y_train, y_test, metric = "mse"):
