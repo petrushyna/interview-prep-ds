@@ -7,6 +7,7 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk import pos_tag
 from nltk import RegexpParser
 
+from sklearn.base import BaseEstimator, TransformerMixin
 
 def tokenize(text):
     stemmer = SnowballStemmer('english')
@@ -58,4 +59,48 @@ def rank_words(df, text_column, ngram_range = (1,2), numOfNgrams = 15, stop_word
     ranking_df = pd.DataFrame(ranking, columns = ['term','rank']) 
     words = (ranking_df.sort_values('rank', ascending = False))[:numOfNgrams] 
     return words
+
+class freqToOneHot(BaseEstimator, TransformerMixin):
+        def fit(self,X): 
+            return self
+        def transform(self, X):
+            #most frequent words in each step to one hot encoding
+            X_width = X.shape[1]
+            X = X.fillna('0')
+            X.index = range(0,X.shape[0])
+            newVoc = define_new_voc(['abov', 'afterward', 'alon', 'alreadi', 'alway', 
+                                            'ani', 'anoth', 'anyon', 'anyth', 'anywher', 'becam', 
+                                            'becaus', 'becom', 'befor', 'besid', 'cri', 'describ', 
+                                            'dure', 'els', 'elsewher', 'empti', 'everi', 'everyon', 
+                                            'everyth', 'everywher', 'fifti', 'forti', 'henc', 'hereaft', 
+                                            'herebi', 'howev', 'hundr', 'inde', 'mani', 'meanwhil', 'minut',
+                                            'moreov', 'nobodi', 'noon', 'noth', 'nowher', 'onc', 'onli', 
+                                            'otherwis', 'ourselv', 'perhap', 'pleas', 'sever', 'sinc', 
+                                            'sincer', 'sixti', 'someon', 'someth', 'sometim', 'somewher', 
+                                            'themselv', 'thenc', 'thereaft', 'therebi', 'therefor', 'togeth', 
+                                            'twelv', 'twenti', 'veri', 'whatev', 'whenc', 'whenev', 'wherea', 
+                                            'whereaft', 'wherebi', 'wherev', 'whi', 'yourselv', 'anywh', 'el', 
+                                            'elsewh', 'everywh', 'ind', 'otherwi', 'plea', 'somewh', 'f'])
+             
+            main_words = []
+            for col in range(0,X_width):
+                print(col)
+                main_words.append(list(rank_words(X, col, ngram_range = (1,2), numOfNgrams = 5, stop_words = newVoc, tokenizer = True).term.values))
+            print(main_words)
+            #encode words in 20 steps
+            for col in range(0, X_width):
+                cv = CountVectorizer(analyzer=lambda x: x)
+                X2 = X.iloc[:][col].apply(lambda x : x.split(' '))
+                test = cv.fit_transform(X2.to_list())
+                test_columns = [x for x in cv.get_feature_names()]
+
+                X_onehotencoded = pd.DataFrame(test.toarray(), columns = test_columns)
+                a = list(set(list(X_onehotencoded.columns)).intersection(set(main_words[col])))
+
+                X = X.join(X_onehotencoded[a], rsuffix = "_"+str(col) + "step")
+            X_columns = list(X.columns)
+            for i in range(0,21):
+                X_columns.remove(i)
+
+            return X[X_columns]
 

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.base import BaseEstimator, TransformerMixin
 
 def deleteNullValues(X): 
     indexWithNull = X[X.isnull().any(axis = 1)].index
@@ -25,3 +26,19 @@ def strToList(list_l, splitSymbol):
 def infToNan(X):
     X = X.replace([np.inf, -np.inf], np.nan)
     return X
+
+class ColStrColumns(BaseEstimator, TransformerMixin):
+    def __init__(self, columns = [], columnsToAdd= 5):
+        self.columns = columns
+        self.columnsToAdd = columnsToAdd
+    def fit(self,X): 
+        return self
+    def transform(self, X): 
+        X_len = X.shape[0]
+        output = pd.DataFrame([])
+        #create additional df with 20 steps from description. Steps are separated with ,
+        for row in range(0, X_len):
+            a = pd.DataFrame(list(X[self.columns].loc[row].values.flatten()[0])).T
+            output = output.append(a.loc[:,:self.columnsToAdd])
+            print(row)
+        return output
