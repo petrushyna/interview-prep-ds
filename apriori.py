@@ -3,10 +3,10 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from nltk.tokenize import RegexpTokenizer
 
 def detect_freq_items(df, min_percentage = 0.01, max_len = 1):
-    freqItemsRecipesSteps = apriori(df, 
+    freqItems = apriori(df, 
                         min_support = min_percentage, 
                         max_len = max_len, use_colnames=True, verbose=1)
-    return freqItemsRecipesSteps
+    return freqItems
 
 def allSequencesToList(seq_):
     seq_['antecedents'] = seq_['antecedents'].apply(lambda x : str(list(x)).replace('[', '').replace(']', '').replace('"', ''))
@@ -23,5 +23,5 @@ def allSequencesToList(seq_):
 
 def get_association_rules(df, min_confidence = 1):
     rules = association_rules(df, 
-                metric="confidence", min_threshold=min_confidence)
+    metric="confidence", min_threshold=min_confidence)
     return rules

@@ -36,11 +36,9 @@ class ColStrColumns(BaseEstimator, TransformerMixin):
     def transform(self, X): 
         X_len = X.shape[0]
         output = pd.DataFrame([])
-        #create additional df with 20 steps from description. Steps are separated with ,
         for row in range(0, X_len):
             a = pd.DataFrame(list(X[self.columns].loc[row].values.flatten()[0])).T
             output = output.append(a.loc[:,:self.columnsToAdd])
-            print(row)
         return output
 
 def dfWithZeroNullOnly(df):
