@@ -14,14 +14,13 @@ def allSequencesToList(seq_):
     tokenizer = RegexpTokenizer(r'[a-zA-Z]+[_]*[0-9]*[a-zA-Z]+')
     seq_steps_ = []
     for i in range(0,seq_.shape[0]):
-        print(i)
         a = tokenizer.tokenize(seq_.iloc[i]['antecedents'].lower())
         b = tokenizer.tokenize(seq_.iloc[i]['consequents'].lower())
         a.extend(b)
         seq_steps_.append(a)
     return seq_steps_
 
-def get_association_rules(df, min_confidence = 1):
-    rules = association_rules(df, 
+def get_association_rules(freq_items, min_confidence = 1):
+    rules = association_rules(freq_items, 
     metric="confidence", min_threshold=min_confidence)
     return rules
