@@ -36,11 +36,6 @@ def define_new_voc(listOfWords):
     return text.ENGLISH_STOP_WORDS.union(listOfWords)
 
 def rank_words(df, text_column, ngram_range = (1,2), numOfNgrams = 15, stop_words = 'english', tokenizer = False):
-    # if(tokenizer): 
-    #     vectorizer = TfidfVectorizer(ngram_range = ngram_range,  
-    #                                 stop_words=stop_words, tokenizer = tokenize)
-    # vectorizer = TfidfVectorizer(ngram_range = ngram_range,  
-    #                                 stop_words=stop_words)
 
     vectorizer = TfidfVectorizer(ngram_range = ngram_range,  
                                     stop_words=stop_words, tokenizer = tokenize)
@@ -84,8 +79,8 @@ class freqToOneHot(BaseEstimator, TransformerMixin):
              
             main_words = []
             for col in range(0,X_width):
-                print(col)
                 main_words.append(list(rank_words(X, col, ngram_range = (1,2), numOfNgrams = 5, stop_words = newVoc, tokenizer = True).term.values))
+            print('Most frequent words:')
             print(main_words)
             #encode words in 20 steps
             for col in range(0, X_width):
@@ -99,8 +94,7 @@ class freqToOneHot(BaseEstimator, TransformerMixin):
 
                 X = X.join(X_onehotencoded[a], rsuffix = "_"+str(col) + "step")
             X_columns = list(X.columns)
-            for i in range(0,21):
+            for i in range(0,X_width):
                 X_columns.remove(i)
-
             return X[X_columns]
 
