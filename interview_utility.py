@@ -1,6 +1,19 @@
 import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
+import zipfile
+from os import path
+
+
+# extract data if csv file doesn't exist yet
+def extractZip(file_path):
+    with zipfile.ZipFile(file_path+'.zip', 'r') as zip_ref:
+        folder_path = ''
+        f_list = file_path.split('/')
+        for i in range(0, len(f_list)-1): 
+            folder_path += f_list[i] + '/'
+        zip_ref.extractall(folder_path)
+
 
 def deleteNullValues(X): 
     indexWithNull = X[X.isnull().any(axis = 1)].index
