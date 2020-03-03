@@ -10,6 +10,8 @@ Devoted noteboks: [Looking for sequences of steps in recipes](https://github.com
 
 * [musicAppLogs](https://www.kaggle.com/rowhitswami/music-app-logs)
 
+Devoted notebooks: [Finding frequent played songs and frequent combinations of played songs](https://github.com/petrushyna/interview-prep-ds/blob/master/music_items_conseq.ipynb)
+
 
 
 
